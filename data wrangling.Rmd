@@ -21,7 +21,7 @@ df <- ipums_time_used %>%
     family_income = famincome, 
     wellbeing_response = wb_resp) %>% 
   select(-wt06, -pernum, -lineno, -caseid) %>%
-  mutate(wellbeing = case_when(
+  mutate(wellbeing_response = case_when(
     wellbeing_response == "FALSE"~ 0, 
     wellbeing_response == "TRUE" ~ 1),
     sex = case_when(
