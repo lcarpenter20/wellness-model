@@ -57,24 +57,37 @@ df <- read_csv("ipums_time_used.csv") %>%
 
 ##Questions: 
 
-Does location effect happiness of a race? 
+1. Does location effect happiness of a race? 
 
-##Hypothesis: 
+2. Are people happier when they make more money? 
 
-Location and Race does not have an effect on someone's happiness 
+##Hypotheses: 
+
+1. Location and Race does not have an effect on someone's happiness 
+$\beta{_0} = 0$
+$\beta{_A} \neq 0$ 
+
+2. Someone's hourly wage does not have an effect on someone's happpiness 
 $\beta{_0} = 0$
 $\beta{_A} \neq 0$ 
 
 ##Model 1: 
 
 ```{r}
-race_location <- lm(wellbeing_response ~ race + residence, data = df)
+race_location <- glm(wellbeing_response ~ race + residence, data = df)
 summary(race_location)
 ```
 
 ##Model 1 Analysis:
 
 ##Model 2: 
+
+```{r}
+wage_logm <- glm(wellbeing_response ~ hourly_wage, data = df, family = binomial)
+summary(wage_logm)
+```
+
+logit($\pi$) = 2.709e+00 - -1.225e-04 * hourly wage 
 
 ##Model 2 Analysis:
 
