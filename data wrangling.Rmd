@@ -14,13 +14,13 @@ library(janitor)
 df <- ipums_time_used %>% 
   clean_names() %>%
   filter(!is.na(wb_resp)) %>%
-  select(-wt06, -pernum, -lineno, -caseid) %>%
   rename(
     residence = metro, 
     education = educ, 
     employment_status = empstat,
     family_income = famincome, 
-    wellbeing_response = wb_resp) %>%
+    wellbeing_response = wb_resp) %>% 
+  select(-wt06, -pernum, -lineno, -caseid) %>%
   mutate(wellbeing = case_when(
     wellbeing_response == "FALSE"~ 0, 
     wellbeing_response == "TRUE" ~ 1),
@@ -32,10 +32,19 @@ df <- ipums_time_used %>%
       employment_status == 2 ~ "Employed", 
       employment_status == 3 ~ "Unemployed",
       employment_status == 4 ~ "Unemployed",
-      employment_status == 5 ~ "Not in labor force"))
+      employment_status == 5 ~ "Not in labor force"),
+    education = case_when(education < 20 ~ "BelowHS",
+                     education == 21 ~ "Some College",
+                     education == 31 ~ "Associate Degree",
+                     education == 40 ~ "Bachelor's Degree",
+                     education == 41 ~ "Master's Degree",
+                     education == 42 ~ "Professional Degree",
+                     education == 43 ~ "Doctoral Degree"))
+
 ```
 
 ```{r}
-unique(df$employment_status)
+unique(df$education)
+
 ```
 
