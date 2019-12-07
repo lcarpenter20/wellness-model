@@ -17,12 +17,25 @@ df <- ipums_time_used %>%
   select(-wt06, -pernum, -lineno, -caseid)%>%
   mutate(wellbeing = case_when(
     wb_resp == "FALSE"~ 0, 
-    wb_resp == "TRUE" ~ 1)) %>% 
+    wb_resp == "TRUE" ~ 1),
+    sex = case_when(
+      sex == 1 ~ "Male",
+      sex == 2 ~ "Female"),
+    employment_status = case_when(
+      employment_status == 1 ~ "Employed",
+      employment_status == 2 ~ "Employed", 
+      employment_status == 3 ~ "Unemployed",
+      employment_status == 4 ~ "Unemployed",
+      employment_status == 5 ~ "Not in labor force")) %>% 
   rename(
     residence = metro, 
     education = educ, 
     employment_status = empstat,
     family_income = famincome, 
-    wellbeing_response = wb_resp) 
+    wellbeing_response = wb_resp)
+```
+
+```{r}
+unique(df$employment_status)
 ```
 
