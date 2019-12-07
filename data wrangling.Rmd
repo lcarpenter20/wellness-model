@@ -1,0 +1,23 @@
+---
+title: "Data Wrangling"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(janitor)
+```
+
+```{r}
+refined_df <- ipums_time_used %>% 
+  clean_names()
+```
+
+
+```{r}
+##data wrangling ----
+
+refined_df <- refined_df
+```
+
