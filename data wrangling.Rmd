@@ -18,7 +18,9 @@ df <- ipums_time_used %>%
     residence = metro, 
     education = educ, 
     employment_status = empstat,
-    wellbeing_response = wb_resp) %>% 
+    wellbeing_response = wb_resp,
+    hourly_wage = hourwage, 
+    hours_work_wk = uhrsworkt) %>% 
   select(-wt06, -pernum, -lineno, -caseid) %>%
   mutate(sex = case_when(
       sex == 1 ~ "Male",
