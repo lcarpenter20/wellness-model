@@ -34,12 +34,13 @@ df <- ipums_time_used %>%
       employment_status == 4 ~ "Unemployed",
       employment_status == 5 ~ "Not in labor force"),
     education = case_when(education < 20 ~ "BelowHS",
-                     education > 20 & education < 31  ~ "Some College",
-                     education == 31 ~ "Associate Degree",
-                     education == 40 ~ "Bachelor's Degree",
-                     education == 41 ~ "Master's Degree",
-                     education == 42 ~ "Professional Degree",
-                     education == 43 ~ "Doctoral Degree"))
+                          education == 20 ~ "High School",
+                          education == 21 | education == 30 ~ "Some College",
+                          education == 31 | education == 32 ~ "Associate Degree",
+                          education == 40 ~ "Bachelor's Degree",
+                          education == 41 ~ "Master's Degree",
+                          education == 42 ~ "Professional Degree",
+                          education == 43 ~ "Doctoral Degree"))
 
 ```
 
