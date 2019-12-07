@@ -64,6 +64,5 @@ df <- ipums_time_used %>%
 
 ```{r}
 unique(df$education)
-
 ```
 
