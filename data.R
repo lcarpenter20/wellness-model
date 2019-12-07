@@ -8,3 +8,4 @@ df <- ipums_time_used %>%
 
 #Years in df include: 
 unique(df$year)
+
