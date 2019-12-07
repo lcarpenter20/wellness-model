@@ -34,31 +34,12 @@ df <- ipums_time_used %>%
       employment_status == 4 ~ "Unemployed",
       employment_status == 5 ~ "Not in labor force"),
     education = case_when(education < 20 ~ "BelowHS",
-                     education == 21 ~ "Some College",
+                     education > 20 & education < 31  ~ "Some College",
                      education == 31 ~ "Associate Degree",
                      education == 40 ~ "Bachelor's Degree",
                      education == 41 ~ "Master's Degree",
                      education == 42 ~ "Professional Degree",
-                     education == 43 ~ "Doctoral Degree"),
-    race = case_when(
-      race == 100 ~ "White",
-      race == 110 ~ "Black",
-      race == 120 ~ "American Indian",
-      race == 131 ~ "Asian",
-      race == 132 ~ "Pacific Islander", 
-      race == 200 ~ "Black-Mixed", 
-      race == 201 ~ "White-Mixed",
-      race == 202 ~ "White-Mixed",
-      race == 203 ~ "White-Mixed",
-      race == 210 ~ "Black-Mixed",
-      race == 211 ~ "Black-Mixed",
-      race == 212 ~ "Black-Mixed",
-      race == 220 ~ "Other-Mixed",
-      race == 230 ~ "Other-Mixed",
-      race == 300 ~ "Black-Mixed",
-      race == 310 ~ "White-Mixed",
-      race == 320 ~ "White-Mixed",
-      race == 400 ~ "Black-Mixed"))
+                     education == 43 ~ "Doctoral Degree"))
 
 ```
 
