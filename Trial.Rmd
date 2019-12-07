@@ -1,0 +1,7 @@
+---
+title: "Project Trial"
+author: "Chhiring Lama"
+output: pdf_document
+---
+
+
