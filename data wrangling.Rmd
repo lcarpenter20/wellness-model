@@ -49,11 +49,17 @@ df <- ipums_time_used %>%
         race == 132 ~ "Pacific Islander", 
         race == 200 | race == 210 | race == 211 | race == 212 | race == 300 | race == 400 ~ "Black-Mixed", 
         race == 201 | race == 202 | race == 203 | race == 310 | race == 320 ~ "White-Mixed",
-        race == 220 | race == 230 ~ "Other-Mixed"))
+        race == 220 | race == 230 ~ "Other-Mixed"), 
+    residence = case_when (
+      residence == 1 ~ "Metropolitan: Central City",
+      residence == 2|residence == 3 ~ "Metropolitan: Others", 
+      residence == 4 ~ "Nonmetropolitan"
+    )) %>% 
+    filter (!is.na(residence))
 
 ```
 
 ```{r}
-unique(df$race)
+unique(df$residence)
 ```
 
