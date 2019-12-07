@@ -18,7 +18,6 @@ df <- ipums_time_used %>%
     residence = metro, 
     education = educ, 
     employment_status = empstat,
-    family_income = famincome, 
     wellbeing_response = wb_resp) %>% 
   select(-wt06, -pernum, -lineno, -caseid) %>%
   mutate(wellbeing_response = case_when(
