@@ -1,0 +1,28 @@
+---
+title: "Data Exploration"
+date: "12/7/2019"
+output: pdf_document
+---
+
+##Questions: 
+
+##Hypothesis: 
+
+##Model 1: 
+
+##Model 1 Analysis:
+
+##Model 2: 
+
+##Model 2 Analysis:
+
+##Model 3: 
+
+##Model 3 Analysis:
+
+##Model 4: 
+
+##Model 4 Analysis:
+ 
+
+
