@@ -9,16 +9,20 @@ library(magrittr)
 library(janitor)
 ```
 
-
-
 ```{r}
 ##data wrangling ----
 df <- ipums_time_used %>% 
   clean_names() %>%
   filter(!is.na(wb_resp)) %>%
-  select(-wt06, -pernum, -lineno)%>%
+  select(-wt06, -pernum, -lineno, -caseid)%>%
   mutate(wellbeing = case_when(
     wb_resp == "FALSE"~ 0, 
-    wb_resp == "TRUE" ~ 1))
+    wb_resp == "TRUE" ~ 1)) %>% 
+  rename(
+    residence = metro, 
+    education = educ, 
+    employment_status = empstat,
+    family_income = famincome, 
+    wellbeing_response = wb_resp) 
 ```
 
