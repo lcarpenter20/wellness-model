@@ -20,10 +20,7 @@ df <- ipums_time_used %>%
     employment_status = empstat,
     wellbeing_response = wb_resp) %>% 
   select(-wt06, -pernum, -lineno, -caseid) %>%
-  mutate(wellbeing_response = case_when(
-    wellbeing_response == "FALSE"~ 0, 
-    wellbeing_response == "TRUE" ~ 1),
-    sex = case_when(
+  mutate(sex = case_when(
       sex == 1 ~ "Male",
       sex == 2 ~ "Female"),
     employment_status = case_when(
