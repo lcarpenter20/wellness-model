@@ -135,6 +135,14 @@ work_logm <- glm(wellbeing_response ~ hourly_wage + hours_work_wk + residence, d
 summary(work_logm)
 ```
 
+##Results so far:
+- **Race**: Only asian is significant
+- **Hourly wage**: significant on its own but not with number of hours and residence
+- **number of hours worked**: significant
+- **Area of residence**: significant
+- **employment status**: significant
+- **Age**: significant
+- **Education**: only one category is significant 
 
 
 
