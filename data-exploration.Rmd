@@ -104,6 +104,12 @@ exp(cbind(OR = coef(age_logm), confint(age_logm)))
 ```
 
 ```{r}
+#Does education level have an effect on someone's wellbeing? 
+log_edu <- glm(wellbeing_response ~ education + employment_status + age + race, data = df, family = binomial(logit))
+summary(log_edu)
+```
+
+```{r}
 #Does employment status has an effect on someone's happiness? 
 emp_logm <- glm(wellbeing_response ~ employment_status, data = df, family = binomial(logit))
 summary(emp_logm)
@@ -114,8 +120,7 @@ exp(cbind(OR = coef(emp_logm), confint(emp_logm)))
 ```
 
 ```{r}
-#Does education level have an effect on someone's wellbeing? 
-log_edu <- glm(wellbeing_response ~ education + employment_status + age + race, data = df, family = binomial(logit))
-summary(log_edu)
+work_logm <- glm(wellbeing_response ~ hourly_wage + hours_work_wk + residence, data = df) 
+summary(work_logm)
 ```
 
