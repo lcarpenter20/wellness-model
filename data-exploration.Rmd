@@ -84,6 +84,9 @@ $H_o: \beta{_1} = 0$
 $H_a:\beta{_1} \neq 0$ 
 
 ##Models  
+```{r}
+df$employment_status <- relevel(factor(df$employment_status), ref = "Not in labor force")
+```
 
 ```{r}
 #Does race have an effect on someone's wellbeing? 
