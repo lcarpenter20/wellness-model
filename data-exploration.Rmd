@@ -94,7 +94,7 @@ $H_a:\beta{_1} \neq 0$
 
 ##Models  
 ```{r}
-df$employment_status <- relevel(factor(df$employment_status), ref = "Not in labor force")
+df$employment_status <- relevel(df$employment_status, ref = "Not in labor force")
 ```
 
 ```{r}
@@ -158,10 +158,10 @@ summary(work_logm)
 
 
 ```{r}
-full_model <- glm(wellbeing_response ~ hours_work_wk + education + residence + employment_status + age, data = df, family = binomial(logit))
+full_model <- glm(wellbeing_response ~ education + residence + employment_status + age + race, data = df, family = binomial(logit))
 summary(full_model)
 ```
-`
+
 
 ```{r}
 ## dataset with only employed people ----
