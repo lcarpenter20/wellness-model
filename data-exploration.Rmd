@@ -145,4 +145,8 @@ summary(work_logm)
 - **Education**: only one category is significant 
 
 
+```{r}
+full_model <- glm(wellbeing_response ~ hours_work_wk + residence + employment_status + age, data = df, family = binomial(logit))
+summary(full_model)
+```
 
