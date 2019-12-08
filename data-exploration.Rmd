@@ -158,7 +158,7 @@ summary(work_logm)
 
 
 ```{r}
-full_model <- glm(wellbeing_response ~ hours_work_wk + residence + employment_status + age, data = df, family = binomial(logit))
+full_model <- glm(wellbeing_response ~ hours_work_wk + education + residence + employment_status + age, data = df, family = binomial(logit))
 summary(full_model)
 ```
 `
