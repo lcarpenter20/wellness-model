@@ -94,7 +94,7 @@ $H_a:\beta{_1} \neq 0$
 
 ##Models  
 ```{r}
-df$employment_status <- relevel(factor(df$employment_status), ref = "Not in labor force")
+df$employment_status <- relevel(df$employment_status, ref = "Not in labor force")
 ```
 
 ```{r}
