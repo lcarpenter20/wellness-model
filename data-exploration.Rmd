@@ -4,7 +4,7 @@ date: "12/7/2019"
 output: pdf_document
 ---
 
-```{r}
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
 library(tidyverse)
 library(magrittr)
 library(janitor)
