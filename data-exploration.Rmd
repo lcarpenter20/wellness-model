@@ -102,3 +102,13 @@ exp(cbind(OR = coef(age_logm), confint(age_logm)))
 ```
 
 
+```{r}
+#Does employment status has an effect on someone's happiness? 
+
+emp_logm <- glm(wellbeing_response ~ employment_status, data = df, family = binomial(logit))
+summary(emp_logm)
+```
+
+```{r}
+exp(cbind(OR = coef(emp_logm), confint(emp_logm)))
+```
