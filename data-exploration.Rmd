@@ -55,6 +55,19 @@ df <- read_csv("ipums_time_used.csv") %>%
   filter (!is.na(residence))
 ```
 
+##Todo 
+
+1. Pick model 
+2. Run tests 
+- check assumptions of linearity, normality, homoscedacity by looking at residual plots - use the overall F-test 
+- interpret the R^2 value 
+- decide if each predictor is needed with t-tests 
+- calculate and intepret the estimated odds ratio 
+- calculate the 95% CI for the odds ratio 
+- calculate the probability of... 
+3. Summarize results 
+
+
 ##Questions: 
 
 1. Does location effect happiness of a race? 
@@ -62,6 +75,7 @@ df <- read_csv("ipums_time_used.csv") %>%
 2. Are people happier when they make more money? 
 
 ##Hypotheses: 
+We hypothesize that attributes that are considered successful in society will have a positive effect on someone's wellbeing. 
 
 1. Location and Race does not have an effect on someone's happiness 
 $H_o: \beta{_1} = 0$
@@ -122,4 +136,7 @@ exp(cbind(OR = coef(emp_logm), confint(emp_logm)))
 work_logm <- glm(wellbeing_response ~ hourly_wage + hours_work_wk + residence, data = df) 
 summary(work_logm)
 ```
+
+
+
 
