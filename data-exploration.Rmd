@@ -40,7 +40,7 @@ df <- read_csv("ipums_time_used.csv") %>%
          race = case_when(
            race == 100 ~ "White",
            race == 110 ~ "Black",
-           race == 120 ~ "American Indian",
+           race == 120 ~ "Native American",
            race == 131 ~ "Asian",
            race == 132 ~ "Pacific Islander", 
            race == 200 | race == 210 | race == 211 | race == 212 | race == 300 | race == 400|
@@ -95,6 +95,9 @@ $H_a:\beta{_1} \neq 0$
 ##Models  
 ```{r}
 df$employment_status <- relevel(df$employment_status, ref = "Not in labor force")
+df$race <- relevel(df$race, ref = "White")
+df$sex <- relevel(df$sex, ref = "Male")
+df$residence <- relevel(df$residence, ref = "Nonmetropolitan")
 ```
 
 ```{r}
@@ -158,7 +161,7 @@ summary(work_logm)
 
 
 ```{r}
-full_model <- glm(wellbeing_response ~ education + residence + employment_status + age, data = df, family = binomial(logit))
+full_model <- glm(wellbeing_response ~ education + residence + employment_status + age + race, data = df, family = binomial(logit))
 summary(full_model)
 ```
 
