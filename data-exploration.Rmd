@@ -153,3 +153,10 @@ full_model <- glm(wellbeing_response ~ hours_work_wk + residence + employment_st
 summary(full_model)
 ```
 
+```{r}
+## dataset with onyl employed people ----
+employed_df <- df %>%
+  filter (hours_work_wk != 9999, hourly_wage != 999.99) %>%
+  select(wellbeing_response, hours_work_wk, hourly_wage)
+```
+
