@@ -101,6 +101,10 @@ df$residence <- relevel(df$residence, ref = "Nonmetropolitan")
 ```
 
 ```{r}
+df$education <- relevel(df$education, ref = "BelowHS")
+```
+
+```{r}
 #Does race have an effect on someone's wellbeing? 
 race <- glm(wellbeing_response ~ race, data = df, family = binomial(logit))
 summary(race)
@@ -176,4 +180,10 @@ employed_df <- df %>%
 employed_logm <- glm(wellbeing_response ~ hours_work_wk + hourly_wage, dat = employed_df, family = binomial(logit))
 summary(employed_logm)
 ```
+
+```{r}
+education_model <- glm(wellbeing_response ~ education, data = df, family = binomial(logit))
+summary(education_model)
+```
+
 
