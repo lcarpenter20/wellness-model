@@ -94,7 +94,7 @@ $H_a:\beta{_1} \neq 0$
 
 ##Models  
 ```{r}
-df$employment_status <- relevel(df$employment_status, ref = "Not in labor force")
+df$employment_status <- relevel(df$employment_status, ref = "Unemployed")
 df$race <- relevel(df$race, ref = "White")
 df$sex <- relevel(df$sex, ref = "Male")
 df$residence <- relevel(df$residence, ref = "Nonmetropolitan")
