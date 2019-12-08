@@ -158,15 +158,19 @@ summary(work_logm)
 
 
 ```{r}
-full_model <- glm(wellbeing_response ~ education + residence + employment_status + age + race, data = df, family = binomial(logit))
+full_model <- glm(wellbeing_response ~ education + residence + employment_status + age, data = df, family = binomial(logit))
 summary(full_model)
 ```
-
 
 ```{r}
 ## dataset with only employed people ----
 employed_df <- df %>%
   filter (hours_work_wk != 9999, hourly_wage != 999.99) %>%
   select(wellbeing_response, employment_status, hours_work_wk, hourly_wage)
+```
+
+```{r}
+employed_logm <- glm(wellbeing_response ~ hours_work_wk + hourly_wage, dat = employed_df, family = binomial(logit))
+summary(employed_logm)
 ```
 
