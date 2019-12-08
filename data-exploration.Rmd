@@ -49,8 +49,17 @@ df <- read_csv("ipums_time_used.csv") %>%
          residence = case_when (
            residence == 1 ~ "Metropolitan: Central City",
            residence == 2|residence == 3 ~ "Metropolitan: Others", 
-           residence == 4 ~ "Nonmetropolitan")) %>% 
+           residence == 4 ~ "Nonmetropolitan"),
+         sex = as.factor(sex),
+         residence = as.factor(residence),
+         education = as.factor(education),
+         employment_status = as.factor(employment_status),
+         race = as.factor(race)) %>% 
   filter (!is.na(residence))
+```
+
+```{r}
+lapply(df, class)
 ```
 
 ##Todo 
