@@ -65,12 +65,12 @@ df <- read_csv("ipums_time_used.csv") %>%
 ##Hypotheses: 
 
 1. Location and Race does not have an effect on someone's happiness 
-$\beta{_0} = 0$
-$\beta{_A} \neq 0$ 
+$H_o: \beta{_1} = 0$
+$H_a:\beta{_1} \neq 0$ 
 
 2. Someone's hourly wage does not have an effect on someone's happpiness 
-$\beta{_0} = 0$
-$\beta{_A} \neq 0$ 
+$H_o: \beta{_1} = 0$
+$H_a:\beta{_1} \neq 0$ 
 
 ##Models  
 
