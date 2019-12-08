@@ -9,6 +9,7 @@ library(tidyverse)
 library(magrittr)
 library(janitor)
 ```
+
 ```{r}
 ##data wrangling ----
 df <- read_csv("ipums_time_used.csv") %>% 
@@ -32,8 +33,7 @@ df <- read_csv("ipums_time_used.csv") %>%
            employment_status == 4 ~ "Unemployed",
            employment_status == 5 ~ "Not in labor force"),
          education = case_when(education < 20 ~ "BelowHS",
-                               education == 20 ~ "High School",
-                               education == 21 | education == 30 ~ "Some College",
+                               education == 20| education == 21 | education == 30  ~ "High School",
                                education == 31 | education == 32 ~ "Associate Degree",
                                education == 40 ~ "Bachelor's Degree",
                                education == 41 ~ "Master's Degree",
@@ -45,13 +45,28 @@ df <- read_csv("ipums_time_used.csv") %>%
            race == 120 ~ "American Indian",
            race == 131 ~ "Asian",
            race == 132 ~ "Pacific Islander", 
-           race == 200 | race == 210 | race == 211 | race == 212 | race == 300 | race == 400 | race == 201 | race == 202 | race == 203 | race == 310 | race == 320 |race == 220 | race == 230 ~ "Mixed"),
+           race == 200 | race == 210 | race == 211 | race == 212 | race == 300 | race == 400|
+           race == 201 | race == 202 | race == 203 | race == 310 | race == 320 |
+           race == 220 | race == 230 ~ "Mixed"),
          residence = case_when (
            residence == 1 ~ "Metropolitan: Central City",
            residence == 2|residence == 3 ~ "Metropolitan: Others", 
            residence == 4 ~ "Nonmetropolitan")) %>% 
   filter (!is.na(residence))
 ```
+
+##Todo 
+
+1. Pick model 
+2. Run tests 
+- check assumptions of linearity, normality, homoscedacity by looking at residual plots - use the overall F-test 
+- interpret the R^2 value 
+- decide if each predictor is needed with t-tests 
+- calculate and intepret the estimated odds ratio 
+- calculate the 95% CI for the odds ratio 
+- calculate the probability of... 
+3. Summarize results 
+
 
 ##Questions: 
 
@@ -60,20 +75,21 @@ df <- read_csv("ipums_time_used.csv") %>%
 2. Are people happier when they make more money? 
 
 ##Hypotheses: 
+We hypothesize that attributes that are considered successful in society will have a positive effect on someone's wellbeing. 
 
 1. Location and Race does not have an effect on someone's happiness 
-$\beta{_0} = 0$
-$\beta{_A} \neq 0$ 
+$H_o: \beta{_1} = 0$
+$H_a:\beta{_1} \neq 0$ 
 
 2. Someone's hourly wage does not have an effect on someone's happpiness 
-$\beta{_0} = 0$
-$\beta{_A} \neq 0$ 
+$H_o: \beta{_1} = 0$
+$H_a:\beta{_1} \neq 0$ 
 
 ##Models  
 
 ```{r}
 #Does race have an effect on someone's wellbeing? 
-race <- glm(wellbeing_response ~ race + hourly_wage, data = df, family = binomial(logit))
+race <- glm(wellbeing_response ~ race, data = df, family = binomial(logit))
 summary(race)
 ```
 
@@ -87,7 +103,6 @@ logit($\pi$) = 2.709e+00 - -1.225e-04 * hourly wage
 
 ```{r}
 exp(cbind(OR = coef(wage_logm), confint(wage_logm)))
-exp(coefconfint(wage_logm))
 ```
 
 
@@ -100,5 +115,28 @@ summary(age_logm)
 ```{r}
 exp(cbind(OR = coef(age_logm), confint(age_logm)))
 ```
+
+```{r}
+#Does education level have an effect on someone's wellbeing? 
+log_edu <- glm(wellbeing_response ~ education + employment_status + age + race + residence + hours_work_wk, data = df, family = binomial(logit))
+summary(log_edu)
+```
+
+```{r}
+#Does employment status has an effect on someone's happiness? 
+emp_logm <- glm(wellbeing_response ~ employment_status, data = df, family = binomial(logit))
+summary(emp_logm)
+```
+
+```{r}
+exp(cbind(OR = coef(emp_logm), confint(emp_logm)))
+```
+
+```{r}
+work_logm <- glm(wellbeing_response ~ hourly_wage + hours_work_wk + residence, data = df) 
+summary(work_logm)
+```
+
+
 
 
