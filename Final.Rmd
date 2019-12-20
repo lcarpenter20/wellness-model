@@ -1,0 +1,175 @@
+---
+title: "Investigating External Factors that Contribute to Well-Being"
+author: "Chhiring Lama, Stuti Goyal and Lizette Carpenter"
+date: "12/20/2019"
+output: 
+  html_document:
+    code_folding: hide
+---
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 14px;
+  }
+
+h1.title {
+  font-size: 38px;
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  font-size: 28px;
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+    font-size: 22px;
+}
+
+</style>
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+## loading the pacakges ----
+library(tidyverse)
+library(magrittr)
+library(janitor)
+library(GGally)
+library("Hmisc")
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+##data wrangling ----
+df <- read_csv("ipums_time_used.csv") %>% 
+  clean_names() %>%
+  filter(!is.na(wb_resp)) %>%
+  rename(
+    residence = metro, 
+    education = educ, 
+    employment_status = empstat,
+    wellbeing_response = wb_resp,
+    hourly_wage = hourwage, 
+    hours_work_wk = uhrsworkt) %>% 
+  select(-wt06, -pernum, -lineno, -caseid) %>%
+  mutate(sex = case_when(
+           sex == 1 ~ "Male",
+           sex == 2 ~ "Female"),
+         employment_status = case_when(
+           employment_status == 1 ~ "Employed",
+           employment_status == 2 ~ "Employed", 
+           employment_status == 3 ~ "Unemployed",
+           employment_status == 4 ~ "Unemployed",
+           employment_status == 5 ~ "Not in labor force"),
+         education = case_when(education < 20 ~ "BelowHS",
+                               education == 20 | education == 21 | education == 30  ~ "High School",
+                               education == 31 | education == 32 ~ "Associate Degree",
+                               education == 40 ~ "Bachelor's Degree",
+                               education == 41| education == 43 ~ "Master's Degree and above"),
+         race = case_when(
+           race == 100 ~ "White",
+           race == 110 ~ "Black",
+           race == 120 ~ "Native American",
+           race == 131 ~ "Asian",
+           race == 132 ~ "Pacific Islander", 
+           race == 200 | race == 210 | race == 211 | race == 212 | race == 300 | race == 400|
+           race == 201 | race == 202 | race == 203 | race == 310 | race == 320 |
+           race == 220 | race == 230 ~ "Mixed"),
+         residence = case_when (
+           residence == 1 ~ "Metropolitan: Central City",
+           residence == 2|residence == 3 ~ "Metropolitan: Others", 
+           residence == 4 ~ "Nonmetropolitan"),
+         sex = as.factor(sex),
+         residence = as.factor(residence),
+         education = as.factor(education),
+         employment_status = as.factor(employment_status),
+         race = as.factor(race)) %>% 
+  filter (!is.na(residence))
+```
+
+# Abstract 
+
+The wellness of individuals is dependent on many factors, some quantifiable and some not. However, society defines certain parameters for an individual in a population who to be well. Using the available data on the wellness index of individuals with predictors such as race, level of education, sex, age, area of residence, employment status, wage, etc we hope to see the magnitude and direction of the relationship. Investigating the given data we see a correlation between such factors and the wellness of individuals.
+
+# Introduction
+
+We were interested in investigating how, factors that have been traditionally perceived as indicators of a “successful” society, affect the well-being of individuals. Some of these factors include diversity in the area of residence, having higher education, being employed, etc. We hope to study the direction of the effect these factors have individually and together on wellness. We intend to test the hypothesis that these factors, whether positively or negatively, have an effect on the wellness of individuals. We have chosen to use the IPUMS- Time Use dataset for Wellness. We are using predictor variables like age, sex, race, family income, area of residence, employment status, hourly wage and level of education, etc to predict the wellness of the population.
+
+# Data
+
+The data for the study were extracted from the [IPUMS - Time Use](https://timeuse.ipums.org/). The extracted dataset consisted of 36,801 observations. Each observation corresponds to a US resident that was interviewed between 2010 and 2013 during the Annual American Time Use Surveys. It was assumed that the sample represents the population of interest - US residents - because of random sampling during the survey. There are a total of eight variables of interest in the dataset. 
+Among them, the response variable is the well-being index. Wellbeing index is a self-reported binary variable whereby a person responding to be doing well in their life is assigned the binary term ‘1’ and a person reporting as not doing well is assigned ‘0’. The other seven variables - age, race, area of residence, employment status, education level, hourly wage and number of hours worked per week -  are all independent (explanatory variables). They were selected as independent variables for further analyses because the results of the simple logistic regressions of wellbeing with these individual variables proved that they were all significant predictors. Simiarly, among the predictors, only employment status and hourly wage seemed to be moderately multicollinear. 
+
+  Age, hourly wage and hours worked per week are quantitative variables. The unit of age and hourly wage are year and US dollars, respectively. Similarly, hours worked per week naturally is in hours. Employment status has three nominal categories: employed, unemployed and not in the labor force. Among them, unemployed is used as the reference level for the regression analyses. Educational level (highest degree obtained) has five ordinal categories: below high school, high school, associate degrees, bachelors degrees, and masters and above. The lowest degree (below high school) was used as the reference. Likewise, race has six nominal categories: White, Asian, Black, Pacific Islanders, American Indian, and mixed race. White was used as the reference to check the wellbeing of individuals of other races compared to a person with European descent. 
+There were numerous racial categories. For this investigation, they were recategorized into fewer categories. Among the individuals with biracial or multi-racial identities were categorized under mixed race for the simplicity of the study. It was taken into account that even among mixed-race identities, the social and cultural context is different for people with different racial lineage. To fully understand the association of race among multi-racial individuals, more in-depth analyses need to be carried out. 
+
+# Results
+
+Before conducting any tests or analysis we checked our assumptions of appropriate outcome structure, independence, absence of multicollinearity and sample size. A binary regression requires the dependent variable to be binary. This assumption is satisfied since the well-being index is binary. In addition, there is independence among each observation which together sum up to a large sample size of 36,801 samples. Finally, when finding the variance inflation factor to ensure there is an absence of multicollinearity between the variables, there appeared to be no major problems. Among the variables, only hours worked per week and employment status showed to have a variance inflation factor greater than five. We kept this in mind when further assessment of our models
+
+## Education Model:
+
+We were interested in investigating how the level of education individually affects the well being of individuals in a population. The levels of education we used in the model were below High School, High School degree, Associate’s degree, Bachelor’s degree and Master’s and above degree. In order to have a reference level of education to compare the wellness of people, we assigned assigned below high school as the reference variable. 
+We built the logistic regression model to understand the relationship between wellness and the various levels of education. 
+
+$H_o: \widehat {HS} = \widehat {Associates} = \widehat {Bachelors} = \widehat {Masters and above} =0$
+
+$H_a:either\ \widehat {HS}\ or\ \widehat {Associates}\ or\ \widehat {Bachelors}\ or\ \widehat {Masters and above}\neq 0$
+
+```{r, message = FALSE}
+education_model <- glm(wellbeing_response ~ education, data = df, family = binomial(logit))
+summary(education_model)
+
+exp(cbind(OR = coef(education_model), confint(education_model)))
+```
+
+  As we see above when the reference variable is below high school the effect of all other levels of education is significant. In Figure 3 we calculate the odds ratio of coefficient for this predictor as shown in figure 3 shows a small difference between people that have attained a high school degree against people that had not completed high school, (1.205% and 1.517%)  and between people that have obtained a Master’s degree and above (1.455% and 2.047%) against people that had not completed high school. However, interestingly we see that wellness is likely to be lesser as we reach the Masters degree and above. 
+
+## Full Model: 
+
+We were interested in investigating how certain predictors collectively affect the well-being index. Our full model checks how the relationship between the level of education, area of residence in the United States, employment status, age and race have an affect on well-being. The levels of education included in the model were below High School, High School degree, Associate’s degree, Bachelor’s degree and Master’s and above degree. We assigned below high school as the reference variable. There were two categories for the area of residence included in the full model. The categories for area of residence include  Metropolitan: Central City, Nonmetropolitan, which was assigned as the reference variable and others. We decided to include employment status expecting significant results. Not in the labor force, employed and unemployed were the three categories for the employment status predictor where unemployed is the reference variable. Finally, race and age were included in the model. The ages of the individuals that were included in the dataset ranged between 15 years old and 86 years old where the average age was 48 years old. 
+
+```{r, message = FALSE}
+#Does education level have an effect on someone's wellbeing even after adding 4 other predictors? 
+log_edu <- glm(wellbeing_response ~ education + employment_status + age + race + residence + hours_work_wk, data = df, family = binomial(logit))
+summary(log_edu)
+```
+
+  We use a multiple logistic regression model to find the significance of these variables, see figure 4. We then looked at the odds ratio of the coefficients of the predictors that reported to be statistically significant.  The odds of reporting being well increases for individuals that have attained a high school education and above. The odds ratio coefficient for this predictor as shown in figure 4 shows a small difference between people that have attained a high school degree against people that had not completed high school, (1.205% and 1.517%)  and between people that have obtained a Master’s degree and above (1.455% and 2.047%) against people that had not completed high school. It is interesting to see that despite being employed, the odds of someone reporting well decreases by .0767% versus someone who is unemployed. Odds or responding well and are statistically significant also include individuals who identified as asian, black, and were older in age. 
+
+```{r, message = FALSE}
+exp(cbind(OR = coef(log_edu), confint(log_edu)))
+```
+ 
+
+## Work Model:
+
+Due to the possibility of violation of multicollinearity between employment status, and hourly wage and number of hours worked per week, the latter two were not included in the full model. It is because people with ‘unemployed’ and ‘not in the labor force’ have missing values for the other two variables. Therefore, to understand how the two variables affect the likelihood of being well among employed individuals, a new model was created. 
+The hypotheses are:
+$H_o: \widehat {hourly\_wage} = \widehat {hours\_work\_wk} =0$
+
+$H_a:either\ \widehat {hourly\_wage}\ or\ \widehat {hours\_work\_wk} \neq 0$ 
+
+where hourly_wage is the hourly wage in dollars and hours_work_wk is the number of hours worked per week. 
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+## dataset with only employed people ----
+employed_df <- df %>%
+  filter (hours_work_wk != 9999, hourly_wage != 999.99) %>%
+  select(wellbeing_response, employment_status, hours_work_wk, hourly_wage)
+```
+
+```{r, message = FALSE}
+## Does hourly wage and number of hours worked affect one's wellbeing? 
+employed_logm <- glm(wellbeing_response ~ hours_work_wk + hourly_wage, dat = employed_df, family = binomial(logit))
+summary(employed_logm)
+```
+
+```{r, message = FALSE}
+exp(cbind(OR = coef(employed_logm), confint(employed_logm)))
+```
+
+  Looking at the odds ratio of the coefficients, odds of responding well decrease by 0.0000118% for every hour increase in work. Odds for responding being well increases by 0.001266 % for every one dollar increase in hourly wage. At the 0.05 significance level, we fail to reject the null hypothesis. We do not have significant evidence that hourly wage and number of hours worked per week are associated with the wellbeing response of the US residents. This relationship might be different in other countries or specific cities where the work culture and payroll system is different. 
+
+# Conclusion
+
+We discovered various insights about the effect the predictors have on the well-being index from this investigation. Our education model showed the people that have attained a higher education are more likely to be well. Our full model showed that people of color are less likely to respond as being well and this statistically significant in Asian and Black residents. Among all the predictors included in the full model, the area of residence was the only predictor that does not affect the likelihood of being well. On the other hand, older people are less likely to be happy and surprisingly employed individuals are less likely to be well. The work model reported the number of hours worked per weekly and hourly wage does affect odds of a person doing well but neither predictors were significant. 
+
+  The dataset included a self-reported outcome variable which is important to keep in mind when evaluating the results. What it means to be well may be different for every individual reported in the study. Moving forward, health related predictors such as number of visits to the doctor, insurance policies, political climate and lifestyle habits may aid further investigations. 
+
